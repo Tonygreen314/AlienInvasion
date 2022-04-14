@@ -31,11 +31,6 @@ def key_up_events(event, ship):
     if event.key == pygame.K_DOWN:
         ship.moving_down = False
 
-    """
-    if event.key == pygame.K_SPACE:
-    ship.moving_left_rotate = True
-    """
-
 
 """checks when if the key is pressed down and then moves the ship 
 corresponding to the input that is given"""
@@ -67,8 +62,11 @@ def update_screen(screen, settings, ship, bullets, aliens, boss):
     """draw bullets on the screen"""
     for bullet in bullets.sprites():
         bullet.draw_bullet()
+
     aliens.draw(screen)
     boss.draw(screen)
+    print_text(settings, screen)
+    print_win(settings, screen)
     """update the display"""
     pygame.display.flip()
 
@@ -86,18 +84,19 @@ def create_fleet(settings, screen, ship, aliens, boss):
 def get_number_of_aliens_x(settings, alien_width):
     """determine the number of aliens that fit in a row"""
     available_space_x = settings.screen_width - 2 * alien_width
-    number_of_aliens = int(available_space_x/(2 * alien_width))
-    return number_of_aliens
+    amount_of_aliens = int(available_space_x/(2 * alien_width))
+    return amount_of_aliens
 
 
 def get_number_rows(settings, alien_height, ship_height):
     available_space_y = settings.screen_height - 3 * alien_height - ship_height
-    number_of_rows = int(available_space_y/(2.5*alien_height))
+    number_of_rows = int(available_space_y/(5*alien_height))
     return number_of_rows
 
 
 def number_of_aliens(settings, alien_height, alien_width, ship_height):
-    number_of_actual_aliens = get_number_rows(settings, alien_height, ship_height) * get_number_of_aliens_x(settings, alien_width)
+    number_of_actual_aliens = get_number_rows(settings, alien_height, ship_height) \
+                              * get_number_of_aliens_x(settings, alien_width)
     return number_of_actual_aliens
 
 
@@ -113,6 +112,30 @@ def create_alien(settings, screen, aliens, alien_number, row_number, big_boss):
     big_boss.add(boss)
 
 
-def check_collision(bullets, aliens, boss):
-    pygame.sprite.groupcollide(bullets, aliens, True, True)
-    pygame.sprite.groupcollide(bullets, boss, True, True)
+def check_collision(bullets, aliens, boss, settings):
+    alien_collision = pygame.sprite.groupcollide(bullets, aliens, True, True)
+    boss_collision = pygame.sprite.groupcollide(bullets, boss, True, True)
+    if alien_collision:
+        settings.points += 1
+
+    if boss_collision:
+        settings.boss_kill = True
+
+
+def limit_bullets(bullets):
+    for bullet in bullets:
+        if bullet.rect.top < 20:
+            bullets.remove(bullet)
+
+
+def print_text(settings, screen):
+    font = pygame.font.SysFont("Times New Roman", 30, True, False)
+    surface = font.render("Number of Aliens: " + str(33 - settings.points), True, (0, 255, 0))
+    screen.blit(surface, (430, 570))
+
+
+def print_win(settings, screen):
+    if settings.points >= 33 and settings.boss_kill is True:
+        font = pygame.font.SysFont("Times New Roman", 30, True, False)
+        surface = font.render("YOU WIN!", True, (0, 255, 0))
+        screen.blit(surface, (500, 300))
