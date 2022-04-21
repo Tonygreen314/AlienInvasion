@@ -66,7 +66,7 @@ def update_screen(screen, settings, ship, bullets, aliens, boss):
 
     aliens.draw(screen)
     boss.draw(screen)
-    print_text(settings, screen)
+    print_points(settings, screen)
 
     """update the display"""
     pygame.display.flip()
@@ -116,6 +116,7 @@ def create_alien(settings, screen, aliens, alien_number, row_number, big_boss):
 def check_collision(bullets, aliens, boss, settings):
     alien_collision = pygame.sprite.groupcollide(bullets, aliens, True, True)
     boss_collision = pygame.sprite.groupcollide(bullets, boss, True, True)
+
     if alien_collision:
         settings.points += 1
 
@@ -129,12 +130,13 @@ def limit_bullets(bullets):
             bullets.remove(bullet)
 
 
-def print_text(settings, screen):
+def print_points(settings, screen):
     font = pygame.font.SysFont("Times New Roman", 30, True, False)
     surface = font.render("Number of Points: " + str(settings.points), True, (0, 255, 0))
     screen.blit(surface, (435, 570))
 
 
 def restart(settings, screen, ship, aliens, boss):
-    if aliens == 0:
+    if len(aliens) == 0:
         create_fleet(settings, screen, ship, aliens, boss)
+        settings.alien_speed += 1
