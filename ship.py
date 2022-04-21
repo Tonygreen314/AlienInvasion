@@ -48,8 +48,8 @@ class Ship:
             self.center2 -= 3
         if self.moving_down:
             self.center2 += 3
-        if self.center2 <= 25:
-            self.center2 = 25
+        if self.center2 <= 400:
+            self.center2 = 400
         if self.center2 >= 545:
             self.center2 = 545
         """this makes the center of the ship the same as the new inputs that the user is doing"""

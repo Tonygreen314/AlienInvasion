@@ -45,3 +45,5 @@ class Alien(Sprite):
         if self.rect.left < 0 or self.rect.right > 1200:
             self.speed = -self.speed
             self.rect.y += 25
+        if self.rect.y == 200:
+            return True

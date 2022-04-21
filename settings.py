@@ -16,3 +16,4 @@ class Settings:
         self.alien_speed = 1
         self.points = 0
         self.boss_kill = False
+        self.bullet_limit = 4

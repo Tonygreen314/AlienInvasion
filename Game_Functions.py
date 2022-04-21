@@ -47,7 +47,8 @@ def key_down_events(ship, event, settings, screen, bullets):
         ship.moving_down = True
     if event.key == pygame.K_SPACE:
         new_bullet = Bullets(settings, screen, ship)
-        bullets.add(new_bullet)
+        if len(bullets) < settings.bullet_limit:
+            bullets.add(new_bullet)
 
 
 def update_screen(screen, settings, ship, bullets, aliens, boss):
@@ -66,7 +67,7 @@ def update_screen(screen, settings, ship, bullets, aliens, boss):
     aliens.draw(screen)
     boss.draw(screen)
     print_text(settings, screen)
-    print_win(settings, screen)
+
     """update the display"""
     pygame.display.flip()
 
@@ -119,7 +120,7 @@ def check_collision(bullets, aliens, boss, settings):
         settings.points += 1
 
     if boss_collision:
-        settings.boss_kill = True
+        settings.points += 10
 
 
 def limit_bullets(bullets):
@@ -130,12 +131,10 @@ def limit_bullets(bullets):
 
 def print_text(settings, screen):
     font = pygame.font.SysFont("Times New Roman", 30, True, False)
-    surface = font.render("Number of Aliens: " + str(33 - settings.points), True, (0, 255, 0))
-    screen.blit(surface, (430, 570))
+    surface = font.render("Number of Points: " + str(settings.points), True, (0, 255, 0))
+    screen.blit(surface, (435, 570))
 
 
-def print_win(settings, screen):
-    if settings.points >= 33 and settings.boss_kill is True:
-        font = pygame.font.SysFont("Times New Roman", 30, True, False)
-        surface = font.render("YOU WIN!", True, (0, 255, 0))
-        screen.blit(surface, (500, 300))
+def restart(settings, screen, ship, aliens, boss):
+    if aliens == 0:
+        create_fleet(settings, screen, ship, aliens, boss)
