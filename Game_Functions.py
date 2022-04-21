@@ -67,7 +67,7 @@ def update_screen(screen, settings, ship, bullets, aliens, boss):
     aliens.draw(screen)
     boss.draw(screen)
     print_points(settings, screen)
-
+    print_waves(settings, screen)
     """update the display"""
     pygame.display.flip()
 
@@ -133,7 +133,14 @@ def limit_bullets(bullets):
 def print_points(settings, screen):
     font = pygame.font.SysFont("Times New Roman", 30, True, False)
     surface = font.render("Number of Points: " + str(settings.points), True, (0, 255, 0))
-    screen.blit(surface, (435, 570))
+    screen.blit(surface, (920, 570))
+
+
+def print_waves(settings, screen):
+    waves = settings.alien_speed
+    font = pygame.font.SysFont("Times New Roman", 30, True, False)
+    surface = font.render("Number of Waves: "+str(waves), True, (0, 255, 0))
+    screen.blit(surface, (15, 570))
 
 
 def restart(settings, screen, ship, aliens, boss):
