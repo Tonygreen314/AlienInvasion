@@ -16,8 +16,10 @@ def alien_invasion():
     settings = Settings()
     """creates the display of the game"""
     screen = pygame.display.set_mode((settings.screen_width, settings.screen_height))
+
     """declares what the window  name is"""
     pygame.display.set_caption('Alien Invasion')
+
     """add ship"""
     ship = Ship(screen, 0)
     """add alien"""
@@ -29,6 +31,7 @@ def alien_invasion():
     Gf.create_fleet(settings, screen, ship, aliens, boss)
     """loop to start animation"""
     while True:
+
         """checks if the user has hit any of the keys"""
         Gf.check_events(settings, screen, ship, bullets)
         """updates the screen with a bullet when space bar is pressed"""

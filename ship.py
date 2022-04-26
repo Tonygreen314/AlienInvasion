@@ -1,8 +1,8 @@
 import pygame
 from pygame.sprite import Sprite
 
-class Ship(Sprite):
 
+class Ship(Sprite):
     """a class to store the information of the ship"""
     def __init__(self, screen, angle):
         super(Ship, self).__init__()
@@ -25,6 +25,7 @@ class Ship(Sprite):
         """stores center_x of ship as a decimal value"""
         self.center = float(self.rect.centerx)
         self.center2 = float(self.rect.centery)
+        self.speed = 15
         """create movement flag to determine if the ship is moving"""
         self.moving_right = False
         self.moving_left = False
@@ -38,17 +39,17 @@ class Ship(Sprite):
     def update(self):
         """updates the movement of the ship by moving it left and or right"""
         if self.moving_right:
-            self.center += 3
+            self.center += self.speed
         if self.moving_left:
-            self.center -= 3
+            self.center -= self.speed
         if self.center <= 25:
             self.center = 25
         if self.center >= 1175:
-            self.center = 1175
+            self.center = 1175.
         if self.moving_up:
-            self.center2 -= 3
+            self.center2 -= self.speed
         if self.moving_down:
-            self.center2 += 3
+            self.center2 += self.speed
         if self.center2 <= 25:
             self.center2 = 25
         if self.center2 >= 545:

@@ -1,6 +1,6 @@
 import pygame
 import sys
-from aliens import Alien
+from Images.aliens import Alien
 from bullets import Bullets
 from Mother_Alien import Boss
 
@@ -54,16 +54,17 @@ def key_down_events(ship, event, settings, screen, bullets):
 def update_screen(screen, settings, ship, bullets, aliens, boss):
     """adds the color to the screen"""
     screen.fill(settings.bg_color)
+    image = pygame.image.load("Images/Space-invader-background-final.png")
+    screen.blit(image, (0, 0))
     """update the ship"""
-    ship.update()
-
-    """draws the ship and the alien """
     ship.blitme()
+    ship.update()
 
     """draw bullets on the screen"""
     for bullet in bullets.sprites():
         bullet.draw_bullet()
 
+    update_aliens(aliens, screen)
     aliens.draw(screen)
     boss.draw(screen)
     print_points(settings, screen)
@@ -91,7 +92,7 @@ def get_number_of_aliens_x(settings, alien_width):
 
 def get_number_rows(settings, alien_height, ship_height):
     available_space_y = settings.screen_height - 3 * alien_height - ship_height
-    number_of_rows = int(available_space_y/(5*alien_height))
+    number_of_rows = int(available_space_y/(2.5*alien_height))
     return number_of_rows
 
 
@@ -113,6 +114,23 @@ def create_alien(settings, screen, aliens, alien_number, row_number, big_boss):
     big_boss.add(boss)
 
 
+def update_fleet(aliens):
+    for alien in aliens:
+        alien.direction = alien.direction * -1
+        alien.rect.y += alien.drop_speed
+
+
+def update_aliens(aliens, screen):
+    # draw fleet of aliens
+    aliens.draw(screen)
+    aliens.update()
+
+    for alien in aliens:
+        if alien.check_screen():
+            update_fleet(aliens)
+            break
+
+
 def check_collision(bullets, aliens, boss, settings):
     alien_collision = pygame.sprite.groupcollide(bullets, aliens, True, True)
     boss_collision = pygame.sprite.groupcollide(bullets, boss, True, True)
@@ -132,14 +150,14 @@ def limit_bullets(bullets):
 
 def print_points(settings, screen):
     font = pygame.font.SysFont("Times New Roman", 30, True, False)
-    surface = font.render("Number of Points: " + str(settings.points), True, (0, 255, 0))
-    screen.blit(surface, (920, 570))
+    surface = font.render("Number of Points: " + str(settings.points), True, (200, 255, 0))
+    screen.blit(surface, (880, 570))
 
 
 def print_waves(settings, screen):
-    waves = settings.alien_speed
+    waves = settings.alien_speed - 1
     font = pygame.font.SysFont("Times New Roman", 30, True, False)
-    surface = font.render("Number of Waves: "+str(waves), True, (0, 255, 0))
+    surface = font.render("Number of Waves: "+str(waves), True, (200, 255, 0))
     screen.blit(surface, (15, 570))
 
 
