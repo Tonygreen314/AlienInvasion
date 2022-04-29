@@ -18,14 +18,16 @@ class Ship(Sprite):
         self.screen_rect = screen.get_rect()
         """set starting location of each shop"""
         """ makes the center x values of the ship the same as the center x values of the screen"""
+
         self.rect.centerx = self.screen_rect.centerx
+
         self.rect.centery = self.screen_rect.centery
         """makes the bottom of the ship the same as the bottom of the screen"""
         self.rect.bottom = 570
         """stores center_x of ship as a decimal value"""
         self.center = float(self.rect.centerx)
         self.center2 = float(self.rect.centery)
-        self.speed = 15
+        self.speed = 20
         """create movement flag to determine if the ship is moving"""
         self.moving_right = False
         self.moving_left = False
@@ -57,3 +59,11 @@ class Ship(Sprite):
         """this makes the center of the ship the same as the new inputs that the user is doing"""
         self.rect.centerx = self.center
         self.rect.centery = self.center2
+
+    def center_ship(self):
+        self.rect.centerx = self.screen_rect.centerx
+        self.rect.centery = self.screen_rect.centery
+
+        self.center = self.rect.centerx
+        self.center2 = self.rect.centerx
+        self.rect.bottom = 570

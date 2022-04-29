@@ -30,16 +30,13 @@ def alien_invasion():
     boss = Group()
     Gf.create_fleet(settings, screen, ship, aliens, boss)
     """loop to start animation"""
-    while True:
+    while settings.game_on:
 
         """checks if the user has hit any of the keys"""
         Gf.check_events(settings, screen, ship, bullets)
         """updates the screen with a bullet when space bar is pressed"""
         bullets.update()
-        aliens.update()
-        boss.update()
-        Gf.restart(settings, screen, ship, aliens, boss)
-        Gf.check_collision(bullets, aliens, boss, settings)
+
         Gf.limit_bullets(bullets)
         """updates the screen to show any of the new inputs"""
         Gf.update_screen(screen, settings, ship, bullets, aliens, boss)
