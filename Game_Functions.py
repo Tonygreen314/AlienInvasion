@@ -6,7 +6,7 @@ from Mother_Alien import Boss
 from time import sleep
 
 
-def check_events(settings, screen, ship, bullets):
+def check_events(settings, screen, ship, bullets, play_button):
     """this function check for key and mouse and checks for movement"""
     """creates a way to exit the game"""
     for event in pygame.event.get():
@@ -17,6 +17,10 @@ def check_events(settings, screen, ship, bullets):
             key_down_events(ship, event, settings, screen, bullets)
         elif event.type == pygame.KEYUP:
             key_up_events(event, ship)
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            mouse_x, mouse_y = pygame.mouse.get_pos()
+            if play_button.rect.collidepoint(mouse_x, mouse_y):
+                settings.game_active = True
 
 
 """checks the code to see if the user is not pressing the button"""
@@ -52,27 +56,30 @@ def key_down_events(ship, event, settings, screen, bullets):
             bullets.add(new_bullet)
 
 
-def update_screen(screen, settings, ship, bullets, aliens, boss):
+def update_screen(screen, settings, ship, bullets, aliens, boss, play_button):
     """adds the color to the screen"""
+
     screen.fill(settings.bg_color)
     image = pygame.image.load("Images/Space-invader-background-final.png")
     screen.blit(image, (0, 0))
 
-    """update the ship"""
-    ship.blitme()
-    ship.update()
+    if not settings.game_active:
+        play_button.draw_button()
+    elif settings.game_active:
+        """update the ship"""
+        ship.blitme()
+        ship.update()
 
-    """draw bullets on the screen"""
-    for bullet in bullets.sprites():
-        bullet.draw_bullet()
-
-    update_aliens(settings, screen, ship, aliens, bullets, boss)
-    aliens.draw(screen)
-    boss.draw(screen)
-    print_points(settings, screen)
-    print_waves(settings, screen)
-    print_lives(settings, screen)
-    """update the display"""
+        """draw bullets on the screen"""
+        for bullet in bullets.sprites():
+            bullet.draw_bullet()
+        update_aliens(settings, screen, ship, aliens, bullets, boss)
+        aliens.draw(screen)
+        boss.draw(screen)
+        print_points(settings, screen)
+        print_waves(settings, screen)
+        print_lives(settings, screen)
+        """update the display"""
     pygame.display.flip()
 
 
@@ -179,12 +186,13 @@ def print_lives(settings, screen):
     screen.blit(surface, (470, 570))
 
 
-def end_game(screen, ship, aliens):
+def end_game(screen, ship, aliens, settings):
     font = pygame.font.SysFont("Times New Roman", 50, True, False)
     surface = font.render("You Loose", True, (200, 255, 0))
     screen.blit(surface, (515, 300))
     ship.speed = 0
     aliens.speed = 0
+    settings.bullet_limit = 0
 
 
 def reset_wave(settings, screen, ship, aliens, bullets, boss):
@@ -201,7 +209,7 @@ def ship_hit(settings, screen, ship, aliens, bullets, boss):
     if settings.lives > 0:
         reset_wave(settings, screen, ship, aliens, bullets, boss)
     else:
-        end_game(screen, ship, settings)
+        end_game(screen, ship, aliens, settings)
         settings.lives = 0
         ship.center_ship()
 
