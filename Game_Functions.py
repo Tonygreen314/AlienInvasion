@@ -178,6 +178,7 @@ def new_wave(settings, screen, ship, aliens, boss):
     if len(aliens) == 0:
         create_fleet(settings, screen, ship, aliens, boss)
         settings.alien_speed += 1
+        settings.wave_number += 1
 
 
 def print_lives(settings, screen):
