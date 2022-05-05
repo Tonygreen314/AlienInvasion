@@ -76,6 +76,7 @@ def update_screen(screen, settings, ship, bullets, aliens, boss, play_button):
         update_aliens(settings, screen, ship, aliens, bullets, boss)
         aliens.draw(screen)
         boss.draw(screen)
+        boss.update()
         print_points(settings, screen)
         print_waves(settings, screen)
         print_lives(settings, screen)
